@@ -6,7 +6,10 @@
     <title>Update Info</title>
 </head>
 <body>
-    <form action="">
+    <div>
+        <h3>Favorite book: {{ favorite_book.value }}</h4>
+    </div>
+    <form action="" method="POST">
         {% csrf_token %}
         <div>
             <input type="text" name="new_val">
