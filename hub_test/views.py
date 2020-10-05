@@ -83,14 +83,14 @@ def create_contact(request):
                         "property": "email",
                         "value": request.POST.get('email')
                     },
-                    {
-                        "property": "firstname",
-                        "value": request.POST.get('first_name')
-                    },
-                    {
-                        "property": "lastname",
-                        "value": request.POST.get('last_name')
-                    },
+                    # {
+                    #     "property": "firstname",
+                    #     "value": request.POST.get('first_name')
+                    # },
+                    # {
+                    #     "property": "lastname",
+                    #     "value": request.POST.get('last_name')
+                    # },
                     # {
                     #     "property": "company",
                     #     "value": "CodedBuzz"
@@ -102,3 +102,35 @@ def create_contact(request):
         except:
             pass
     return TemplateResponse(request, 'hub_test/create_contact.html', context)
+
+
+
+def check_for_existing_contacts(email='eyakuabsorkar@gmail.com'):
+    endpoint = "https://api.hubapi.com/contacts/v1/contact/email/{}/profile?hapikey={}"\
+        .format(email, settings.APP_API_KEY_TEST)
+    check_response = requests.get(url=endpoint)
+    print(check_response.status_code == 404)
+
+
+def create_contact_property(property_name="order_amount"):
+    endpoint = "https://api.hubapi.com/properties/v1/contacts/properties?hapikey={}".format(
+        settings.APP_API_KEY_TEST
+    )
+    headers = {"Content-Type": "application/json"}
+    data = json.dumps({
+        "name": property_name,
+        "label": "Order Amount",
+        "description": "A new property for you",
+        "groupName": "contactinformation",
+        "type": "string",
+        "fieldType": "text",
+        "formField": 'true',
+        "displayOrder": 6,
+        "options": [
+
+        ]
+    })
+    response = requests.post(url=endpoint, data=data, headers=headers)
+    print(response)
+
+
