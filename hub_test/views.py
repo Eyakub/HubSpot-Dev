@@ -44,7 +44,7 @@ def individual_data(request):
             data = json.dumps({
                 "properties": [
                     {
-                        "property": "favorite_book",
+                        "property": "test_property",
                         "value": request.POST.get('new_val')
                     }
                 ]
@@ -112,14 +112,14 @@ def check_for_existing_contacts(email='eyakuabsorkar@gmail.com'):
     print(check_response.status_code == 404)
 
 
-def create_contact_property(property_name="order_amount"):
+def create_contact_property(property_name="eyakub_pro"):
     endpoint = "https://api.hubapi.com/properties/v1/contacts/properties?hapikey={}".format(
         settings.APP_API_KEY_TEST
     )
     headers = {"Content-Type": "application/json"}
     data = json.dumps({
         "name": property_name,
-        "label": "Order Amount",
+        "label": "eyakub pro",
         "description": "A new property for you",
         "groupName": "contactinformation",
         "type": "string",
@@ -127,10 +127,42 @@ def create_contact_property(property_name="order_amount"):
         "formField": 'true',
         "displayOrder": 6,
         "options": [
-
+            
         ]
     })
     response = requests.post(url=endpoint, data=data, headers=headers)
-    print(response)
+    print(response.json())
 
 
+
+def contact_property_info(request):
+    email="eyakubsorkar@gmail.com"
+    endpoint = "https://api.hubapi.com/contacts/v1/contact/email/{}/profile?hapikey={}".format(
+        email, settings.APP_API_KEY_TEST
+    )
+    response = requests.get(url=endpoint)
+    response = response.json()
+    print('-------------->', response['properties']['favorite_book'])
+    context = {
+        # 'favorite_book': favorite_book['properties']['favorite_book']
+    }
+    return JsonResponse(response['properties'])
+
+
+def update_info():
+    url ='https://api.hubapi.com/contacts/v1/contact/vid/8564585/profile?hapikey={}'.format(settings.APP_API_KEY_TEST)
+    headers = {}
+    headers['Content-Type']= 'application/json'
+
+    data=json.dumps({
+    "properties": [
+        {
+        "property": "eyakub_pro",
+        "value": "testerson"
+        }
+    ]
+    })
+
+    r = requests.post(data=data, url=url, headers=headers)
+
+    print(r.json())
